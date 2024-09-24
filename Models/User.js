@@ -16,11 +16,7 @@ const UserSchema = new mongoose.Schema({
     avatar: {
         type: String
     },
-    User : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "users",
-        required : true
-    },
+    
     date: {
         type: Date,
         default: Date.now
