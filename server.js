@@ -6,7 +6,7 @@ dbConnect();
 const app = express();
 app.use(express.json());
 
-app.use("/user", require("./Routes/user.route"));
+app.use("/api/user", require("./Routes/user.route"));
 
 
 
@@ -16,4 +16,4 @@ app.get("/", (req, res) => {
 
 app.listen(process.env.PORT, () => {
     console.log(`server running on port ${process.env.PORT}`)
-})
+});
