@@ -96,6 +96,20 @@ const updateProfile = async (req, res) => {
 };
 
 
+const deleteUser = async (req, res) => {
+   try {
+      const { email } = req.body;
+      const user = await User.findOne({ email });
+      if (!user) {
+         return res.status(400).json({ message: "user not found" });
+      }
+      const deletedUser = await User.findOneAndDelete({ email });
+      return res.status(200).json({ message: "user deleted", data: deletedUser });
 
+   } catch (error) {
+      return res.status(500).json({ message: error.message });
 
-module.exports = { registerUser, loginUser, updateProfile }
+   }
+};
+
+module.exports = { registerUser, loginUser, updateProfile , deleteUser}

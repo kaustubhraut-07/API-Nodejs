@@ -1,25 +1,25 @@
 const Tasks = require("../Models/Tasks");
 
 const getTasks = async (req, res) => {
-    try{
+    try {
         const tasks = await Tasks.find();
         return res.status(200).json({ message: "tasks fetched", data: tasks });
-    }catch(error){
-   return     res.status(500).json({ message: error.message });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
 };
 
 const addTask = async (req, res) => {
     try {
-        const { userId, name, description, completed, date } = req.body; 
+        const { userId, name, description, completed, date } = req.body;
 
-       
+
         const newTask = new Tasks({
             name,
             description,
             completed,
             date,
-            user: userId  
+            user: userId
         });
 
         await newTask.save();
@@ -47,4 +47,14 @@ const updateTask = async (req, res) => {
 };
 
 
-module.exports = { getTasks, addTask , updateTask }
+const deletetask = async (req, res) => {
+    try {
+        const { taskId } = req.params;
+        await Tasks.findByIdAndDelete(taskId);
+        return res.status(200).json({ message: "Task deleted successfully" });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { getTasks, addTask, updateTask, deletetask }
