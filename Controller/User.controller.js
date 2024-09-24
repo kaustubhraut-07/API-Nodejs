@@ -1,7 +1,7 @@
 const User = require("../Models/User");
 
 const bcrypt = require("bcrypt");
-
+const cloudinary = require("../config/cloudenary");
 
 const registerUser = async (req, res) => {
    try {
@@ -52,7 +52,7 @@ const loginUser = async (req, res) => {
 
       }
 
-      return res.status(200).json({ message: "login successful" , data : user });
+      return res.status(200).json({ message: "login successful", data: user });
 
    } catch (error) {
       return res.status(500).json({ message: error.message });
@@ -62,5 +62,40 @@ const loginUser = async (req, res) => {
 };
 
 
+const updateProfile = async (req, res) => {
+   try {
+      const { name,email } = req.body;
+      const { avatar } = req.files;
+      const userdetails = await User.findOne({email : email});
+// console.log(avatar[0].buffer);/
+      if (!userdetails) {
+         return res.status(400).json({ message: "user not found" });
 
-module.exports = { registerUser , loginUser }
+      }
+      let avatarUrl;
+
+      if (avatar) {
+
+
+         const signatureUpload = await cloudinary(avatar[0].buffer);
+         // console.log(signatureUpload);
+         avatarUrl = signatureUpload.secure_url;
+
+
+      }
+      const updatedUserInfo = await User.findOneAndUpdate(
+         { email },
+         { name, avatar: avatarUrl },
+         { new: true }
+      );
+      return res.status(200).json({ message: "user updated", data: updatedUserInfo });
+
+   } catch (error) {
+      return res.status(500).json({ message: error.message });
+   }
+};
+
+
+
+
+module.exports = { registerUser, loginUser, updateProfile }
