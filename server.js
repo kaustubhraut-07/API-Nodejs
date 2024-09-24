@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 
 app.use("/api/user", require("./Routes/user.route"));
-
+app.use("/api/task", require("./Routes/task.route"));
 
 
 app.get("/", (req, res) => {
